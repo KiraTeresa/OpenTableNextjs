@@ -6,8 +6,8 @@ interface Props {
     restaurant: RestaurantCardType;
 }
 
-export default function RestaurantCard({restaurant}: Props) {
-    const {name, main_image, cuisine, slug, location, price} = restaurant
+export default async function RestaurantCard({restaurant}: Props) {
+    const {id, name, main_image, cuisine, slug, location, price, reviews} = restaurant
 
     return (
         <div
@@ -23,7 +23,7 @@ export default function RestaurantCard({restaurant}: Props) {
                     <h3 className="font-bold text-2xl mb-2">{name}</h3>
                     <div className="flex items-start">
                         <div className="flex mb-2">*****</div>
-                        <p className="ml-2">77 reviews</p>
+                        <p className="ml-2">{reviews.length} review{reviews.length === 1? "": "s"}</p>
                     </div>
                     <div className="flex text-reg font-light capitalize">
                         <p className=" mr-3">{cuisine.name}</p>

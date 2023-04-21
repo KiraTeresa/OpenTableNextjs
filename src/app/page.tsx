@@ -1,7 +1,7 @@
 import {Inter} from '@next/font/google'
 import Header from "@/app/components/Header";
 import RestaurantCard from "@/app/components/RestaurantCard";
-import {PrismaClient, Cuisine, Location, PRICE} from "@prisma/client";
+import {PrismaClient, Cuisine, Location, PRICE, Review} from "@prisma/client";
 
 /** This is a server component
  *  No http requests, fetching data directly from the server
@@ -15,6 +15,7 @@ export interface RestaurantCardType {
     slug: string;
     location: Location;
     price: PRICE;
+    reviews: Review[];
 }
 
 const inter = Inter({subsets: ['latin']})
@@ -29,7 +30,8 @@ const fetchRestaurants = async (): Promise<RestaurantCardType[]> => {
             cuisine: true,
             slug: true,
             location: true,
-            price: true
+            price: true,
+            reviews: true,
         }
     });
     return restaurants
@@ -37,14 +39,13 @@ const fetchRestaurants = async (): Promise<RestaurantCardType[]> => {
 
 export default async function Home() {
     const restaurants = await fetchRestaurants()
-    console.log({restaurants})
 
     return (
                 <main>
                     <Header/>
                     <div className="py-3 px-36 mt-10 flex flex-wrap justify-center">
                         {restaurants.map((restaurant) => {
-                            return <RestaurantCard restaurant={restaurant}/>
+                            return <RestaurantCard key={restaurant.id} restaurant={restaurant}/>
                         })}
                     </div>
                 </main>
