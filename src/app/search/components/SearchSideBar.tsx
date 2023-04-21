@@ -1,8 +1,7 @@
-import {Cuisine, PRICE} from "@prisma/client";
-import React, {useState} from "react";
+import {Location, Cuisine, PRICE} from "@prisma/client";
 import Link from "next/link";
 
-export default async function SearchSideBar({locations, cuisines, searchParams}: {locations: Location[], cuisines: Cuisine[],searchParams: {city?: string, cuisine?: string, price?: PRICE}}) {
+export default function SearchSideBar({locations, cuisines, searchParams}: {locations: Location[], cuisines: Cuisine[],searchParams: {city?: string, cuisine?: string, price?: PRICE}}) {
 
     const prices = [{
         price: PRICE.CHEAP,

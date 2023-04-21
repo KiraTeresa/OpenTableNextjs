@@ -6,54 +6,50 @@ import {PRICE, PrismaClient} from "@prisma/client";
 import React from "react";
 
 const prisma = new PrismaClient()
-const fetchRestaurantsByCity = (city: string | undefined): Promise<RestaurantCardType[]> => {
-    const select = {
-        id: true,
-        name: true,
-        main_image: true,
-        cuisine: true,
-        slug: true,
-        location: true,
-        price: true
-    }
-    if (!city) {
-        return prisma.restaurant.findMany({select})
-    }
+const select = {
+    id: true,
+    name: true,
+    main_image: true,
+    cuisine: true,
+    slug: true,
+    location: true,
+    price: true
+}
+
+interface SearchParams { city?: string, cuisine?: string, price?: PRICE }
+
+const fetchRestaurantsByQuery = (searchParams: SearchParams) => {
 
     return prisma.restaurant.findMany({
         where: {
             location: {
                 name: {
-                    equals: city.toLowerCase()
+                    equals: searchParams.city?.toLowerCase()
                 },
             },
+            cuisine: {
+                name: {
+                    equals: searchParams.cuisine?.toLowerCase()
+                },
+            },
+            price: {
+                equals: searchParams.price
+            }
         },
         select,
-    });
+    })
 }
 
 const fetchLocations = () => {
-    return prisma.location.findMany({
-        select: {
-            id: true,
-            name: true,
-
-        }
-    })
+    return prisma.location.findMany()
 }
 
 const fetchCuisines = () => {
-    return prisma.cuisine.findMany({
-        select: {
-            id: true,
-            name: true,
-
-        }
-    })
+    return prisma.cuisine.findMany()
 }
 
-export default async function Search({searchParams}: { searchParams: { city?: string, cuisine?: string, price?: PRICE } }) {
-    const restaurants = await fetchRestaurantsByCity(searchParams.city)
+export default async function Search({searchParams}: { searchParams: SearchParams }) {
+    const restaurants = await fetchRestaurantsByQuery(searchParams)
     const locations = await fetchLocations()
     const cuisines = await fetchCuisines()
 
