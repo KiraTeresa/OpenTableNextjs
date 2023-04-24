@@ -1,5 +1,5 @@
 "use client"
-import {Alert, Box, Button, CircularProgress, Modal, Typography} from "@mui/material"
+import {Alert, Box, Button, CircularProgress, Modal} from "@mui/material"
 import React, {useContext, useEffect, useState} from "react";
 import AuthModalInputs from "@/app/components/AuthModalInputs";
 import useAuth from "../../../hooks/useAuth";
@@ -60,7 +60,7 @@ export default function AuthModal({isSignin}: { isSignin: boolean }) {
 
     const handleClick = () => {
         if (isSignin) {
-            signin({email: inputs.email, password: inputs.password})
+            signin({email: inputs.email, password: inputs.password}, handleClose)
         }
     }
 

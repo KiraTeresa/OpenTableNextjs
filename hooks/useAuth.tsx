@@ -6,7 +6,9 @@ import {any} from "prop-types";
 const useAuth = () => {
     const {data, error, loading, setAuthState} = useContext(AuthenticationContext)
 
-    const signin = async ({email, password}: {email: string; password: string}) => {
+    const signin = async ({email, password}: {
+        email: string; password: string
+    }, handleClose: () => void) => {
         setAuthState({
             data: null,
             error: null,
@@ -20,7 +22,8 @@ const useAuth = () => {
                 error: null,
                 loading: false
             })
-        } catch (error: any){
+            handleClose()
+        } catch (error: any) {
             console.log(error.response.data.errorMessage)
             setAuthState({
                 data: null,
@@ -29,7 +32,8 @@ const useAuth = () => {
             })
         }
     }
-    const signup = async () => {}
+    const signup = async () => {
+    }
 
     return {
         signin,
