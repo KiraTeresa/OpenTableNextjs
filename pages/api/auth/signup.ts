@@ -2,6 +2,7 @@ import {NextApiRequest, NextApiResponse} from "next"
 import validator from "validator";
 import {PrismaClient} from "@prisma/client";
 import bcrypt from "bcrypt"
+import * as jose from "jose"
 
 const prisma = new PrismaClient()
 
@@ -71,6 +72,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 phone,
                 email
             }})
+
+        const alg = "HS256"
+
+        const secret = new TextEncoder().encode(process.env.JWT_SECTRET)
+
+        /*
+        * Create a new JWT:
+        * pass in the payload (unique identifier)
+        * set the header/algorithm
+        * expiration time
+        * the secret
+        */
+        const token = await new jose.SignJWT({email: user.email}).setProtectedHeader({alg}).setExpirationTime("24h").sign(secret)
 
         res.status(200).json({hello: "there"})
     }
