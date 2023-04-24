@@ -2,6 +2,7 @@
 import {Box, Button, Modal, Typography} from "@mui/material"
 import React, {useEffect, useState} from "react";
 import AuthModalInputs from "@/app/components/AuthModalInputs";
+import useAuth from "../../../hooks/useAuth";
 
 const style = {
     position: "absolute" as "absolute",
@@ -18,6 +19,7 @@ export default function AuthModal({isSignin}: { isSignin: boolean }) {
     const [open, setOpen] = useState(false)
     const handleOpen = () => setOpen(true)
     const handleClose = () => setOpen(false)
+    const {signin} = useAuth()
 
     const renderContent = (signinContent: string, signupContent: string) => {
         return isSignin ? signinContent : signupContent
@@ -54,6 +56,12 @@ const [disabled, setDisabled] = useState(true)
         setDisabled(true)
     }, [inputs])
 
+    const handleClick = () => {
+        if(isSignin){
+            signin({email: inputs.email, password: inputs.password})
+        }
+    }
+
     return (
         <div>
             <Button onClick={handleOpen}
@@ -80,7 +88,7 @@ const [disabled, setDisabled] = useState(true)
                             </h2>
                             <AuthModalInputs inputs={inputs} handleChangeInput={handleChangeInput} isSignin={isSignin}/>
                             <button
-                                className="uppercase bg-red-600 w-full text-white p-3 rounded text-sm mb-5 disabled:bg-gray-400" disabled={disabled}>
+                                className="uppercase bg-red-600 w-full text-white p-3 rounded text-sm mb-5 disabled:bg-gray-400" disabled={disabled} onClick={handleClick}>
                                 {renderContent("Sign In", "Create Account")}
                             </button>
                         </div>
