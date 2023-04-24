@@ -1,5 +1,5 @@
 "use client"
-import {Box, Button, CircularProgress, Modal, Typography} from "@mui/material"
+import {Alert, Box, Button, CircularProgress, Modal, Typography} from "@mui/material"
 import React, {useContext, useEffect, useState} from "react";
 import AuthModalInputs from "@/app/components/AuthModalInputs";
 import useAuth from "../../../hooks/useAuth";
@@ -100,6 +100,9 @@ export default function AuthModal({isSignin}: { isSignin: boolean }) {
                                     disabled={disabled} onClick={handleClick}>
                                     {renderContent("Sign In", "Create Account")}
                                 </button>
+                                {error?
+                                <Alert severity="error">{error}</Alert>
+                                    :""}
                             </div>
                         </div>}
                 </Box>
