@@ -1,6 +1,7 @@
 import {NextApiRequest, NextApiResponse} from "next"
 import validator from "validator";
 import {PrismaClient} from "@prisma/client";
+import bcrypt from "bcrypt"
 
 const prisma = new PrismaClient()
 
@@ -59,6 +60,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (userWithEmail){
             return res.status(400).json({errorMessage: "Email is associated with another account."})
         }
+
+        const hashedPassword = await bcrypt.hash(password, 10)
 
         res.status(200).json({hello: "there"})
     }
