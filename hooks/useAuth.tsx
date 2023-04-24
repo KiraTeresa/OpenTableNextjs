@@ -2,10 +2,11 @@ import axios from "axios"
 import {useContext} from "react";
 import {AuthenticationContext} from "@/app/context/AuthContext";
 import {any} from "prop-types";
-import {getCookie} from "cookies-next";
+import {getCookie, removeCookies} from "cookies-next";
+import {remove} from "next/dist/build/webpack/loaders/resolve-url-loader/lib/file-protocol";
 
 const useAuth = () => {
-    const {data, error, loading, setAuthState} = useContext(AuthenticationContext)
+    const {setAuthState} = useContext(AuthenticationContext)
 
     const signin = async ({email, password}: {
         email: string; password: string
@@ -58,9 +59,20 @@ const useAuth = () => {
         }
     }
 
+    const signout = () => {
+        removeCookies("jwt")
+
+        setAuthState({
+            data: null,
+            error: null,
+            loading: false
+        })
+    }
+
     return {
         signin,
-        signup
+        signup,
+        signout
     }
 }
 
