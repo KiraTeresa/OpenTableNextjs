@@ -1,6 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next"
-import validator from "validator";
-import {PrismaClient} from "@prisma/client";
+import validator from "validator"
+import {PrismaClient} from "@prisma/client"
 import bcrypt from "bcrypt"
 import * as jose from "jose"
 
@@ -89,4 +89,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(200).json({hello: "there"})
     }
 
+    return res.status(404).json("Unknown endpoint")
 }
