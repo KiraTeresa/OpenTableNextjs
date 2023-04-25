@@ -1,5 +1,6 @@
 import {NextApiRequest, NextApiResponse} from "next";
 import {PrismaClient} from "@prisma/client";
+import {findAvailableTables} from "../../../../services/restaurant/findAvailableTables";
 
 const prisma = new PrismaClient
 
@@ -9,6 +10,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const restaurant = await prisma.restaurant.findUnique({
         where: {
             slug
+        },
+        select: {
+            tables: true,
+            open_time: true,
+            close_time: true
         }
     })
 
@@ -20,5 +26,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({errorMessage: "Restaurant is not open at that time"})
     }
 
-    return res.json({slug, day, time, partySize: partySize})
+    const searchTimesWithTables = await findAvailableTables({day, time, res, restaurant})
+
+    if(!searchTimesWithTables){
+        return res.status(400).json({errorMessage: "Invalid data provided"})
+    }
+
+    const searchTimeWithTables = searchTimesWithTables.find((t)=> {
+        return t.date.toISOString() === new Date(`${day}T${time}`).toISOString()
+    })
+
+    if(!searchTimeWithTables){
+        return res.status(400).json({errorMessage: "No availability"})
+    }
+
+    return res.json({searchTimeWithTables})
 }
