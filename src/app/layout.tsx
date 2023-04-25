@@ -2,6 +2,7 @@ import './globals.css'
 import NavBar from "@/app/components/NavBar";
 import AuthContext from "@/app/context/AuthContext";
 import React from "react";
+import "react-datepicker/dist/react-datepicker.css"
 
 /*export const metadata = {
     title: 'Create Next App',
