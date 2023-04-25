@@ -5,14 +5,14 @@ import {useState} from "react";
 import useAvailabilities from "../../../../../hooks/useAvailabilities";
 import {CircularProgress} from "@mui/material";
 import Link from "next/link";
-import {convertToDisplayTime} from "../../../../../utils/convertToDisplayTime";
+import {convertToDisplayTime, Time} from "../../../../../utils/convertToDisplayTime";
 
 export default function ReservationCard({openTime, closeTime, slug}: {
     openTime: string;
     closeTime: string;
     slug: string
 }) {
-    const {data, loading, error, fetchAvailabilities} = useAvailabilities()
+    const {data, loading, fetchAvailabilities} = useAvailabilities()
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date())
     const [time, setTime] = useState(openTime)
     const [partySize, setPartySize] = useState("2")
@@ -102,7 +102,7 @@ export default function ReservationCard({openTime, closeTime, slug}: {
                             return time.available ?
                                 <Link href={`/reserve/${slug}?date=${day}T${time.time}&partySize=${partySize}`}
                                       className="bg-red-600 cursor-pointer p-2 w-24 text-center text-white mb-3 rounded mr-3">
-                                    <p className="text-sm font-bold">{convertToDisplayTime(time.time)}</p>
+                                    <p className="text-sm font-bold">{convertToDisplayTime(time.time as Time)}</p>
                                 </Link>
                                 :
                                 <p className="bg-gray-300 p-2 w-24 mb-3 rounded mr-3"></p>
