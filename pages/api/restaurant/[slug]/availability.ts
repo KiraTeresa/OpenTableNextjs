@@ -15,6 +15,7 @@ const prisma = new PrismaClient()
 * For each searchTime return an object, which holds the provided date, the time, and the restaurants tables, and store these object in an array
 * Take the booked tables and remove those from that newly created array
 * For every searchTime get the sum of available seats and compare to requested partySize
+* Filter times only, which are within restaurant opening window
 */
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -66,7 +67,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             slug
         },
         select: {
-            tables: true
+            tables: true,
+            open_time: true,
+            close_time: true,
         }
     })
 
@@ -104,6 +107,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             time: t.time,
             available: sumSeats >= parseInt(partySize)
         }
+    }).filter(availability => {
+        const timeIsAfterOpeningHours = new Date(`${day}T${availability.time}`)>= new Date(`${day}T${restaurant.open_time}`)
+
+        const timeIsBeforeClosingHours = new Date(`${day}T${availability.time}`)<= new Date(`${day}T${restaurant.close_time}`)
+
+        return timeIsAfterOpeningHours && timeIsBeforeClosingHours
     })
 
     return res.json({availabilities})
