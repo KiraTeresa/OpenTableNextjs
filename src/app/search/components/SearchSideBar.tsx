@@ -37,7 +37,7 @@ export default function SearchSideBar({locations, cuisines, searchParams}: {loca
                 <h1 className="mb-2">Price</h1>
                 <div className="flex">
                     {prices.map(({price, label, className })=> (
-                        <Link href={{pathname: "/search", query: {...searchParams, price: price}}} className={className}>
+                        <Link key={price} href={{pathname: "/search", query: {...searchParams, price: price}}} className={className}>
                     {label}</Link>
                     ))}
                 </div>
