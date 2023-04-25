@@ -14,6 +14,7 @@ const prisma = new PrismaClient()
 * Check, if there is such restaurant
 * For each searchTime return an object, which holds the provided date, the time, and the restaurants tables, and store these object in an array
 * Take the booked tables and remove those from that newly created array
+* For every searchTime get the sum of available seats and compare to requested partySize
 */
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -94,7 +95,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         })
     })
 
-    return res.json({searchTimes, bookings, bookingTablesObj, tables, searchTimesWithTables})
+    const availabilities = searchTimesWithTables.map(t => {
+        const sumSeats = t.tables.reduce((sum, table) => {
+            return sum + table.seats
+        },0)
+
+        return {
+            time: t.time,
+            available: sumSeats >= parseInt(partySize)
+        }
+    })
+
+    return res.json({availabilities})
 }
 
 // http://localhost:3000/api/restaurant/vivaan-fine-indian-cuisine-ottawa/availability?day=2023-01-01&time=20:00:00.000Z&partySize=4
