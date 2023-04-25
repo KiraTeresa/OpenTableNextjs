@@ -63,7 +63,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const tables = restaurant.tables
 
-    return res.json({searchTimes, bookings,bookingTablesObj, tables})
+    const searchTimesWithTables = searchTimes.map(searchTime => {
+        return {
+            date: new Date(`${day}T${searchTime}`),
+            time: searchTime,
+            tables
+        }
+    })
+
+    return res.json({searchTimes, bookings,bookingTablesObj, tables, searchTimesWithTables})
 }
 
 // http://localhost:3000/api/restaurant/vivaan-fine-indian-cuisine-ottawa/availability?day=2023-01-01&time=20:00:00.000Z&partySize=4
