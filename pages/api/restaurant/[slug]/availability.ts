@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })?.searchTimes
 
     if (!searchTimes) {
-        return res.status(400).json({errorMessage: "Invalid data provided!"})
+        return res.status(400).json({errorMessage: "Invalid data provided"})
     }
 
     const bookings = await prisma.booking.findMany({
@@ -74,7 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     if (!restaurant) {
-        return res.status(400).json({errorMessage: "Invalid data provided."})
+        return res.status(400).json({errorMessage: "Invalid data provided"})
     }
 
     const tables = restaurant.tables
