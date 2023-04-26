@@ -34,7 +34,14 @@ export default function AuthModal({isSignin}: { isSignin: boolean }) {
         })
     }
 
-    const [inputs, setInputs] = useState({firstName: "", lastName: "", email: "", phone: "", city: "", password: ""})
+    const [inputs, setInputs] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        city: "",
+        password: ""
+    })
     const [disabled, setDisabled] = useState(true)
 
     useEffect(() => {
@@ -55,7 +62,7 @@ export default function AuthModal({isSignin}: { isSignin: boolean }) {
             }
         }
 
-        setDisabled(true)
+        return setDisabled(true)
     }, [inputs])
 
     const handleClick = () => {
@@ -102,9 +109,9 @@ export default function AuthModal({isSignin}: { isSignin: boolean }) {
                                     disabled={disabled} onClick={handleClick}>
                                     {renderContent("Sign In", "Create Account")}
                                 </button>
-                                {error?
-                                <Alert severity="error">{error}</Alert>
-                                    :""}
+                                {error ?
+                                    <Alert severity="error">{error}</Alert>
+                                    : ""}
                             </div>
                         </div>}
                 </Box>
