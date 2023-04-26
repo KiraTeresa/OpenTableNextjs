@@ -1,6 +1,7 @@
 "use client"
 
 import React, {useEffect, useState} from "react";
+import useReservation from "../../../../../hooks/useReservation";
 
 export default function Form(){
     const [inputs, setInputs] = useState({
@@ -33,6 +34,7 @@ export default function Form(){
     }
 
     const [disabled, setDisabled] = useState(true)
+    const {error, loading, createReservation} = useReservation()
 
     return (
         <div className="mt-10 flex flex-wrap justify-between w-[660px]">
