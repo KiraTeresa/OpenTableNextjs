@@ -18,13 +18,16 @@ const fetchRestaurantBySlug = async (slug: string) => {
 
     return restaurant
 }
-export default async function Reserve({params}: {params: {slug: string}}) {
+export default async function Reserve({params, searchParams}: {
+    params: {slug: string};
+    searchParams: {date: string, partySize: string}
+}) {
     const restaurant = await fetchRestaurantBySlug(params.slug)
 
     return (
         <div className="border-t h-screen">
             <div className="py-9 w-3/5 m-auto">
-                <Header image={restaurant.main_image} name={restaurant.name}/>
+                <Header image={restaurant.main_image} name={restaurant.name} date={searchParams.date} partySize={searchParams.partySize}/>
                 <Form/>
             </div>
         </div>
