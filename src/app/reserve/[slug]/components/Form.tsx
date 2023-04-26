@@ -2,8 +2,13 @@
 
 import React, {useEffect, useState} from "react";
 import useReservation from "../../../../../hooks/useReservation";
+import {CircularProgress} from "@mui/material";
 
-export default function Form(){
+export default function Form({slug, partySize, date}: {
+    slug: string;
+    partySize: string;
+    date: string
+}) {
     const [inputs, setInputs] = useState({
         bookerFirstName: "",
         bookerLastName: "",
@@ -12,16 +17,19 @@ export default function Form(){
         bookerOccasion: "",
         bookerRequest: ""
     })
+    const [day, time] = date.split("T")
+    const [disabled, setDisabled] = useState(true)
+    const {error, loading, createReservation} = useReservation()
 
     useEffect(() => {
-            if (
-                inputs.bookerFirstName &&
-                inputs.bookerLastName &&
-                inputs.bookerEmail &&
-                inputs.bookerPhone
-            ) {
-                return setDisabled(false)
-            }
+        if (
+            inputs.bookerFirstName &&
+            inputs.bookerLastName &&
+            inputs.bookerEmail &&
+            inputs.bookerPhone
+        ) {
+            return setDisabled(false)
+        }
 
         return setDisabled(true)
     }, [inputs])
@@ -33,8 +41,21 @@ export default function Form(){
         })
     }
 
-    const [disabled, setDisabled] = useState(true)
-    const {error, loading, createReservation} = useReservation()
+
+    const handleClick = async () => {
+        const booking = await createReservation({
+            slug,
+            partySize,
+            day,
+            time,
+            bookerFirstName: inputs.bookerFirstName,
+            bookerLastName: inputs.bookerLastName,
+            bookerPhone: inputs.bookerPhone,
+            bookerEmail: inputs.bookerEmail,
+            bookerOccasion: inputs.bookerOccasion,
+            bookerRequest: inputs.bookerRequest,
+        })
+    }
 
     return (
         <div className="mt-10 flex flex-wrap justify-between w-[660px]">
@@ -86,10 +107,11 @@ export default function Form(){
                 value={inputs.bookerRequest}
                 onChange={handleChangeInput}
             />
-            <button disabled={disabled}
-                className="bg-red-600 w-full p-3 text-white font-bold rounded disabled:bg-gray-300"
+            <button disabled={disabled || loading}
+                    className="bg-red-600 w-full p-3 text-white font-bold rounded disabled:bg-gray-300"
+                    onClick={handleClick}
             >
-                Complete reservation
+                {loading? <CircularProgress color="inherit"/> : "Complete reservation"}
             </button>
             <p className="mt-4 text-sm">
                 By clicking “Complete reservation” you agree to the OpenTable Terms

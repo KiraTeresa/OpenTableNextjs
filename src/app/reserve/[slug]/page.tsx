@@ -2,6 +2,7 @@ import Header from "@/app/reserve/[slug]/components/Header";
 import Form from "@/app/reserve/[slug]/components/Form";
 import {PrismaClient} from "@prisma/client";
 import {notFound} from "next/navigation";
+import {partySize} from "../../../../data";
 
 const prisma = new PrismaClient()
 
@@ -28,7 +29,7 @@ export default async function Reserve({params, searchParams}: {
         <div className="border-t h-screen">
             <div className="py-9 w-3/5 m-auto">
                 <Header image={restaurant.main_image} name={restaurant.name} date={searchParams.date} partySize={searchParams.partySize}/>
-                <Form/>
+                <Form slug={params.slug} date={searchParams.date} partySize={searchParams.partySize}/>
             </div>
         </div>
     )

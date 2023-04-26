@@ -29,17 +29,18 @@ export default function useReservation() {
         try {
             /*            const response = await axios.get(`http://localhost:3000/api/restaurant/${slug}/availability?day=${day}&time=${time}&partySize=${partySize}`)*/
 
-            const response = await axios.post(`http://localhost:3000/api/restaurant/${slug}/reserve`, {}, {
+            const response = await axios.post(`http://localhost:3000/api/restaurant/${slug}/reserve`, {
+                bookerFirstName,
+                bookerLastName,
+                bookerPhone,
+                bookerEmail,
+                bookerOccasion,
+                bookerRequest
+            }, {
                 params: {
                     day,
                     time,
                     partySize,
-                    bookerFirstName,
-                    bookerLastName,
-                    bookerPhone,
-                    bookerEmail,
-                    bookerOccasion,
-                    bookerRequest
                 }
             })
             setLoading(false)
